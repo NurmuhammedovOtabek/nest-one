@@ -1,6 +1,7 @@
 import { AllowNull, BelongsToMany, Column, DataType, Model, Table } from "sequelize-typescript"
 import { Role } from "../../role/models/role.model";
 import { UserRole } from "./user-role.model";
+import { ApiProperty } from "@nestjs/swagger";
 
 
 interface IUserCA{
@@ -11,6 +12,10 @@ interface IUserCA{
 
 @Table({ tableName: "user" })
 export class User extends Model<User, IUserCA> {
+  @ApiProperty({
+    example: "1",
+    description: "Foydalanuvchi id",
+  })
   @Column({
     type: DataType.INTEGER,
     autoIncrement: true,
@@ -31,17 +36,21 @@ export class User extends Model<User, IUserCA> {
   })
   declare email: string;
 
+  @ApiProperty({
+    example: "1234567",
+    description: "Foydalanuvchi paroli",
+  })
   @Column({
-    type: DataType.STRING(100)
+    type: DataType.STRING(100),
   })
   declare password: string;
 
   @Column({
     type: DataType.BOOLEAN,
-    defaultValue: false
+    defaultValue: false,
   })
-  declare is_active: boolean
+  declare is_active: boolean;
 
-  @BelongsToMany(()=>Role, ()=> UserRole)
-  roles:Role[]
+  @BelongsToMany(() => Role, () => UserRole)
+  roles: Role[];
 }
