@@ -1,4 +1,4 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete, HttpCode, HttpStatus } from '@nestjs/common';
+import { Controller, Get, Post, Body, Patch, Param, Delete, HttpCode, HttpStatus, UseGuards } from '@nestjs/common';
 import { UsersService } from './users.service';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
@@ -6,7 +6,14 @@ import { AddRemoveDto } from './dto/add-remove-role.dto';
 import { ActiveUserDto } from './dto/activate-user.dto';
 import { ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { User } from './models/user.model';
+import { JwtAuthGuard } from '../common/guards/jwt_auth.guard';
+import { SelfGuard } from '../common/guards/self.guard';
+import { Role } from '../role/models/role.model';
+import { RolesGuard } from '../common/guards/role.guard';
+import { Roles } from '../common/decorators/roles.decorator';
 
+
+@Roles("SUPERADMIN")
 @ApiTags("Users - Foydalanuvchilar")
 @Controller("users")
 export class UsersController {
@@ -25,12 +32,18 @@ export class UsersController {
     return this.usersService.create(createUserDto);
   }
 
+  @Roles("ADMIN")
+  @UseGuards(RolesGuard)
+  @UseGuards(JwtAuthGuard)
   @Post("add-role")
   @HttpCode(200)
   addRole(@Body() addRemoveRoleDto: AddRemoveDto) {
     return this.usersService.addRole(addRemoveRoleDto);
   }
 
+  @Roles("ADMIN")
+  @UseGuards(RolesGuard)
+  @UseGuards(JwtAuthGuard)
   @Post("remove-role")
   @HttpCode(202)
   removeRole(@Body() addRemoveRoleDto: AddRemoveDto) {
@@ -51,11 +64,14 @@ export class UsersController {
     description: "foydalanuvhcilar royxati",
     type: [User],
   })
+  @UseGuards(JwtAuthGuard)
   @Get()
   findAll() {
     return this.usersService.findAll();
   }
 
+  @UseGuards(SelfGuard)
+  @UseGuards(JwtAuthGuard)
   @Get(":id")
   findOne(@Param("id") id: string) {
     return this.usersService.findOne(+id);

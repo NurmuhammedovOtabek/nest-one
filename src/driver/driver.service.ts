@@ -3,15 +3,18 @@ import { CreateDriverDto } from './dto/create-driver.dto';
 import { UpdateDriverDto } from './dto/update-driver.dto';
 import { Driver } from './models/driver.model';
 import { InjectModel } from '@nestjs/sequelize';
+import { FileService } from '../file/file.service';
 
 @Injectable()
 export class DriverService {
   constructor(
-    @InjectModel(Driver) private readonly driverModel: typeof Driver
+    @InjectModel(Driver) private readonly driverModel: typeof Driver,
+    private readonly fileService: FileService
   ) {}
 
-  create(createDriverDto: CreateDriverDto) {
-    return this.driverModel.create(createDriverDto);
+  async create(createDriverDto: CreateDriverDto, image: any):Promise<Driver> {
+    const fileName = await this.fileService.serveFile(image)
+    return this.driverModel.create({...createDriverDto, image: fileName});
   }
 
   findAll(): Promise<Driver[]> {

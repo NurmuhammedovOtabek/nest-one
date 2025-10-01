@@ -16,6 +16,7 @@ import { Role } from './role/models/role.model';
 import { UsersModule } from './users/users.module';
 import { UserRole } from './users/models/user-role.model';
 import { AuthModule } from './auth/auth.module';
+import { FileModule } from './file/file.module';
 
 
 
@@ -42,6 +43,7 @@ import { AuthModule } from './auth/auth.module';
     RoleModule,
     UsersModule,
     AuthModule,
+    FileModule,
   ],
   controllers: [],
   providers: [],

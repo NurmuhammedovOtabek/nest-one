@@ -7,6 +7,7 @@ import { RoleService } from '../role/role.service';
 import { Role } from '../role/models/role.model';
 import { AddRemoveDto } from './dto/add-remove-role.dto';
 import { ActiveUserDto } from './dto/activate-user.dto';
+import * as bcrypt from "bcrypt"
 
 @Injectable()
 export class UsersService {
@@ -20,6 +21,8 @@ export class UsersService {
     if (!role) {
       throw new NotFoundException("Bunday role mavjud emas");
     }
+    const hashedPassword = await bcrypt.hash(createUserDto.password, 7);
+    createUserDto.password = hashedPassword;
     const user = await this.userModel.create(createUserDto);
     await user.$set("roles", [role.id]);
     return user;

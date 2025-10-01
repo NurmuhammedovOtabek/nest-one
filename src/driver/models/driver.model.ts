@@ -7,6 +7,7 @@ interface IDriverCreationAttr{
     last_name: string
     phone:string
     driver_litsenc:string
+    image:string
 }
 
 @Table({ tableName: "driver" })
@@ -42,6 +43,11 @@ export class Driver extends Model<Driver, IDriverCreationAttr> {
   })
   driver_litsenc: string;
 
-  @BelongsToMany(()=>Machine, ()=>MachineDriver)
-  machines:Machine[]
+  @Column({
+    type: DataType.STRING
+  })
+  image: string;
+
+  @BelongsToMany(() => Machine, () => MachineDriver)
+  machines: Machine[];
 }
