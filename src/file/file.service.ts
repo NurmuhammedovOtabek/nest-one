@@ -1,13 +1,14 @@
 import { Injectable, InternalServerErrorException } from '@nestjs/common';
 import * as path from 'path';
 import * as fs from 'fs';
-import  * as uuid from "uuid"
+// import  {v4} from "uuid"
 
 @Injectable()
 export class FileService {
     async serveFile(file: any){
         try{
-            const fileName = uuid.v4() + ".jpg"
+            const {v4} = await import("uuid")
+            const fileName = v4() + ".jpg"
             const filePath = path.resolve(__dirname, "../..", 'static')
 
             if(!fs.existsSync(filePath)){

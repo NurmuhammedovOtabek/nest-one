@@ -44,15 +44,16 @@ export class UsersService {
     return user?.dataValues;
   }
   findOne(id: number) {
-    return `This action returns a #${id} user`;
+    return this.userModel.findByPk(id)
   }
 
   update(id: number, updateUserDto: UpdateUserDto) {
     return `This action updates a #${id} user`;
   }
 
-  remove(id: number) {
-    return `This action removes a #${id} user`;
+  async remove(id: number) {
+    await this.userModel.destroy({ where: { id } });
+    return "ochdi"
   }
 
   async addRole(addRemoveRoleDto: AddRemoveDto) {
