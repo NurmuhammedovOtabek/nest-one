@@ -42,7 +42,7 @@ describe("Users controller test", () => {
           value: dto.value,
         };
         user = await usersController.create(createUserDto);
-        console.log(user);
+        // console.log(user);
       });
       it("then it shoould call usersService", () => {
         expect(usersService.create).toHaveBeenCalledWith(createUserDto);

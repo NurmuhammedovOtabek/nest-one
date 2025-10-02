@@ -24,7 +24,7 @@ export class UsersService {
     const hashedPassword = await bcrypt.hash(createUserDto.password, 7);
     createUserDto.password = hashedPassword;
     const user = await this.userModel.create(createUserDto);
-    await user.$set("roles", [role.id]);
+    // await user.$set("roles", [role.id]);
     return user;
   }
 
